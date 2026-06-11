@@ -41,12 +41,12 @@ const GitHubCalendarComponent = () => {
             </h2>
           </div>
           <a
-            href="https://github.com/paras-verma7454"
+            href="https://github.com/Gaurav-023"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors"
           >
-            @paras-verma7454
+            @Gaurav-023
             <ExternalLink className="w-3.5 h-3.5" />
           </a>
         </motion.div>
@@ -63,7 +63,7 @@ const GitHubCalendarComponent = () => {
             {mounted ? (
               <GitHubCalendar
                 key={colorScheme}
-                username="paras-verma7454"
+                username="Gaurav-023"
                 blockSize={16}
                 blockMargin={4}
                 fontSize={14}

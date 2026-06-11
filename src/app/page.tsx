@@ -4,8 +4,6 @@ import { useState, useEffect, type JSX, lazy, Suspense, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Github,
-  Linkedin,
   MapPin,
   Terminal,
   Briefcase,
@@ -16,34 +14,34 @@ import {
   Mail,
 } from "lucide-react";
 
+import { FaGithub, FaLinkedin } from "react-icons/fa";
+
+
 import { PORTFOLIO_CONTENT } from "@/constants/portfolio";
 import type { Contribution } from "@/constants/portfolio";
 import BentoCard from "@/components/BentoCard";
-import ProjectCard from "@/Components/ProjectCard";
-import ContributionItem from "@/Components/ContributionItem";
-import LiveClock from "@/Components/LiveClock";
-import Hero from "@/Components/Hero";
-import { Tooltip } from "@/Components/ui/tooltip-card";
+import ProjectCard from "@/components/ProjectCard";
+import LiveClock from "@/components/LiveClock";
+import Hero from "@/components/Hero";
+import { Tooltip } from "@/components/ui/tooltip-card";
 
-import TypeScript from "@/Components/Typescript";
-import NextJs from "@/Components/NextJS";
-import NodeJs from "@/Components/NodeJs";
-import ReactLogo from "@/Components/React";
-import PostgreSQL from "@/Components/PostgreSQL";
-import FastAPI from "@/Components/FastAPI";
+import TypeScript from "@/components/Typescript";
+import NextJs from "@/components/NextJS";
+import NodeJs from "@/components/NodeJs";
+import ReactLogo from "@/components/React";
+import PostgreSQL from "@/components/PostgreSQL";
+import FastAPI from "@/components/FastAPI";
 
 // Animated icons
-import { GithubIcon, type GithubIconHandle } from "@/Components/ui/github";
-import { LinkedinIcon, type LinkedinIconHandle } from "@/Components/ui/linkedin";
-import { TwitterIcon, type TwitterIconHandle } from "@/Components/ui/twitter";
-import { SendIcon, type SendIconHandle } from "@/Components/ui/send";
-import type { MediumPost } from "@/lib/medium";
-import BlogCard from "@/Components/BlogCard";
-import GitHubCalendarComponent from "@/Components/GitHubCalendarComponent";
-import { MapPinIcon, type MapPinIconHandle } from "@/Components/ui/map-pin";
+import { GithubIcon, type GithubIconHandle } from "@/components/ui/github";
+import { LinkedinIcon, type LinkedinIconHandle } from "@/components/ui/linkedin";
+import { TwitterIcon, type TwitterIconHandle } from "@/components/ui/twitter";
+import { SendIcon, type SendIconHandle } from "@/components/ui/send";
+import GitHubCalendarComponent from "@/components/GithubCalendarComponent";
+import { MapPinIcon, type MapPinIconHandle } from "@/components/ui/map-pin";
 
 // Lazy load heavy below-the-fold components
-const Oneko = lazy(() => import("@/Components/Oneko"));
+const Oneko = lazy(() => import("@/components/Oneko"));
 
 type GroupedContribution = {
   repoName: string;
@@ -89,12 +87,7 @@ const HIDDEN_BLOG_MATCHES = [
   "building-beautiful-cli-experiences-introducing-orizen-tui",
 ];
 
-const isHiddenBlog = (post: MediumPost) => {
-  const searchablePostFields = [post.link, post.guid, post.title]
-    .join(" ")
-    .toLowerCase();
-  return HIDDEN_BLOG_MATCHES.some((match) => searchablePostFields.includes(match));
-};
+
 
 const groupContributionsByRepo = (
   contributions: Contribution[]
@@ -233,45 +226,12 @@ function LocationCard({ colSpan, rowSpan }: { colSpan?: string; rowSpan?: string
 }
 
 export default function Home() {
-  const [blogs, setBlogs] = useState<MediumPost[]>([]);
   const [loadingBlogs, setLoadingBlogs] = useState(true);
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [showAllBlogs, setShowAllBlogs] = useState(false);
   const heroSendRef = useRef<SendIconHandle>(null);
 
   const currentRole = PORTFOLIO_CONTENT.experience[0];
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    fetch(`/api/medium?url=${encodeURIComponent(PORTFOLIO_CONTENT.mediumUrl)}`, {
-      signal: controller.signal,
-    })
-      .then(async (response) => {
-        if (!response.ok) {
-          throw new Error(`Failed to fetch Medium posts: ${response.status}`);
-        }
-        return response.json() as Promise<{ posts?: MediumPost[] }>;
-      })
-      .then((data) => {
-        setBlogs(
-          Array.isArray(data.posts)
-            ? data.posts.filter((post) => !isHiddenBlog(post))
-            : []
-        );
-      })
-      .catch((error) => {
-        if ((error as Error).name === "AbortError") return;
-        console.error("Failed to fetch Medium posts:", error);
-      })
-      .finally(() => {
-        setLoadingBlogs(false);
-      });
-
-    return () => {
-      controller.abort();
-    };
-  }, []);
 
   const startDate = new Date(currentRole.startDate);
   const now = new Date();
@@ -284,24 +244,8 @@ export default function Home() {
   const displayMonths = months < 1 ? 1 : months;
   const expDuration = `${displayMonths} month${displayMonths > 1 ? "s" : ""}`;
 
-  const groupedContributions = groupContributionsByRepo(
-    PORTFOLIO_CONTENT.contributions
-  );
 
-  const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(
-    new Set(groupedContributions.map(group => group.repoName))
-  );
-  const toggleCollapse = (repoName: string) => {
-    setCollapsedGroups((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(repoName)) {
-        newSet.delete(repoName);
-      } else {
-        newSet.add(repoName);
-      }
-      return newSet;
-    });
-  };
+
 
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 text-neutral-800 dark:text-neutral-200 font-sans selection:bg-blue-600 selection:text-white dark:selection:bg-blue-300 dark:selection:text-neutral-900 transition-colors duration-300">
@@ -524,7 +468,7 @@ export default function Home() {
                             )}
                             {role.linkedin && (
                               <a href={role.linkedin} target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors">
-                                <Linkedin size={14} />
+                                <FaLinkedin size={14} />
                               </a>
                             )}
                           </div>
@@ -658,7 +602,7 @@ export default function Home() {
         </div>
 
         {/* === OPEN SOURCE SECTION (Outside the fixed-row grid to fix overflow) === */}
-        <div className="mt-16 w-full cv-auto">
+        {/* <div className="mt-16 w-full cv-auto">
           <div className="mb-6 px-4 md:px-6">
             <div className="flex items-center gap-3">
               <Github className="text-purple-500" size={24} />
@@ -706,103 +650,10 @@ export default function Home() {
               );
             })}
           </div>
-        </div>
+        </div> */}
 
         {/* === BLOG SECTION === */}
-        <div className="mt-20 w-full mb-20 cv-auto">
-          <div className="mb-8 px-4 md:px-6">
-            <div className="flex items-center gap-3">
-              <BookOpen className="text-emerald-500" size={24} />
-              <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Blogs</h2>
-            </div>
-            <p className="text-neutral-600 dark:text-neutral-500 text-sm mt-1">Thought-provoking articles on technology and development.</p>
-          </div>
-
-          {loadingBlogs ? (
-            <div className="flex justify-center py-10">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
-            </div>
-          ) : blogs.length > 0 ? (
-            <div className="max-w-4xl mx-auto">
-              <div className="relative">
-                <motion.div
-                  initial={false}
-                  animate={{ height: showAllBlogs ? "auto" : 340 }}
-                  transition={{ type: "spring", stiffness: 100, damping: 22 }}
-                  className="overflow-hidden relative"
-                >
-                  <div className="flex flex-col border-t border-neutral-200 dark:border-white/5">
-                    {blogs.map((post, idx) => (
-                      <motion.div
-                        key={post.guid}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 * idx }}
-                      >
-                        <BlogCard post={post} />
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-
-                {/* Fold Gradient Overlay & Show More Button */}
-                <AnimatePresence>
-                  {!showAllBlogs && (
-                    <motion.div
-                      initial={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="absolute bottom-0 left-0 right-0 flex items-end justify-center pb-4 bg-gradient-to-t from-neutral-50 via-neutral-50/95 to-transparent dark:from-neutral-950 dark:via-neutral-950/95 z-20 h-32 pointer-events-none"
-                    >
-                      <button
-                        onClick={() => setShowAllBlogs(true)}
-                        className="group/btn flex items-center gap-2 px-6 py-3 rounded-full bg-white/70 dark:bg-neutral-900/70 backdrop-blur-md border border-neutral-200 dark:border-white/10 text-neutral-800 dark:text-neutral-200 font-semibold text-sm shadow-md hover:shadow-lg hover:bg-white/90 dark:hover:bg-neutral-900/90 hover:border-emerald-500/50 dark:hover:border-emerald-400/50 hover:scale-105 transition-all duration-300 cursor-pointer pointer-events-auto"
-                      >
-                        <span>Show More Articles</span>
-                        <ChevronDown size={16} className="text-neutral-500 group-hover/btn:text-emerald-500 dark:group-hover/btn:text-emerald-400 group-hover/btn:translate-y-0.5 transition-all duration-300" />
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Show Less Button */}
-              <AnimatePresence>
-                {showAllBlogs && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 15 }}
-                    transition={{ duration: 0.3, delay: 0.1 }}
-                    className="flex justify-center mt-6"
-                  >
-                    <button
-                      onClick={() => setShowAllBlogs(false)}
-                      className="group/btn flex items-center gap-2 px-6 py-3 rounded-full bg-white/70 dark:bg-neutral-900/70 backdrop-blur-md border border-neutral-200 dark:border-white/10 text-neutral-800 dark:text-neutral-200 font-semibold text-sm shadow-md hover:shadow-lg hover:bg-white/90 dark:hover:bg-neutral-900/90 hover:border-emerald-500/50 dark:hover:border-emerald-400/50 hover:scale-105 transition-all duration-300 cursor-pointer"
-                    >
-                      <span>Show Less</span>
-                      <ChevronDown size={16} className="rotate-180 text-neutral-500 group-hover/btn:text-emerald-500 dark:group-hover/btn:text-emerald-400 group-hover/btn:-translate-y-0.5 transition-all duration-300" />
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          ) : (
-            <div className="mx-4 md:mx-6 rounded-2xl border border-neutral-200 dark:border-white/10 bg-white/70 dark:bg-neutral-900/50 p-5 flex flex-col gap-2">
-              <p className="text-sm text-neutral-700 dark:text-neutral-300">
-                Unable to load Medium posts right now.
-              </p>
-              <a
-                href={PORTFOLIO_CONTENT.mediumUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-emerald-600 dark:text-emerald-400 hover:underline w-fit"
-              >
-                Read on Medium
-              </a>
-            </div>
-          )}
-        </div>
+       {/* will Add in future, focusing on projects and experience for now. */}
 
         {/* Footer */}
         <div className="mt-20 border-t border-neutral-200 dark:border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
