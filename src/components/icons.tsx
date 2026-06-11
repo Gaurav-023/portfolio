@@ -6,8 +6,6 @@ import {
   ChevronDown,
   Download,
   ExternalLink,
-  GithubIcon,
-  Linkedin,
   LucideProps,
   Moon,
   Star,
@@ -20,7 +18,6 @@ export const Icons = {
   arrowRight: ArrowRight,
   download: Download,
   preview: ExternalLink,
-  githubOutline: Github,
   briefcase: Briefcase,
   chevronDown: ChevronDown,
   star: Star,
@@ -74,8 +71,7 @@ export const Icons = {
       />
     </svg>
   ),
-  github: GithubIcon,
-  linkedin: Linkedin,
+
   sass: (props: LucideProps) => (
     <svg viewBox="0 0 50 50" {...props}>
       <g clipPath="url(#clip0_717_61)">
