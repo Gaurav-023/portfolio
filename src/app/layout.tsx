@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title: 'Gaurav — Fullstack Developer',
   description: 'I build production-ready web and AI applications using TypeScript, React, Next.js, Node.js, FastAPI — focused on clean UX and real user impact.',
   icons: {
-    icon: '/Favicon.png',
+    icon: './Favicon.webp',
   },
   openGraph: {
     title: 'Gaurav — Fullstack Developer',

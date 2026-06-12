@@ -77,7 +77,7 @@ export const PORTFOLIO_CONTENT: {
     bio: `I build production-ready web and AI applications using TypeScript, React, Next.js, Node.js, FastAPI, RAG — focused on clean UX and real user impact.`,
     email: "gauravsinghania812@gmail.com",
     availability: "Available for freelance",
-    avatar: "/luffy.jpg",
+    avatar: "/Profile.webp",
   },
   socials: [
     {
@@ -138,7 +138,7 @@ export const PORTFOLIO_CONTENT: {
   {
     company: "Macro Global",
     role: "Web Developer",
-    period: "Nov 2025 - Jun 2026",
+    period: "Aug 2025 - Jan 2026",
     startDate: "2025-11-01",
     description: "Built an enterprise SaaS toolkit platform with full-stack development across frontend and backend systems.",
     points: [

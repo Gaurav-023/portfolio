@@ -658,7 +658,7 @@ export default function Home() {
         {/* Footer */}
         <div className="mt-20 border-t border-neutral-200 dark:border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-neutral-500 text-sm">
-            © {new Date().getFullYear()} Paras. All Rights Reserved.
+            © {new Date().getFullYear()} Gaurav. All Rights Reserved.
           </p>
           <div className="flex gap-6 text-sm font-medium text-neutral-500 dark:text-neutral-400">
             {PORTFOLIO_CONTENT.socials
